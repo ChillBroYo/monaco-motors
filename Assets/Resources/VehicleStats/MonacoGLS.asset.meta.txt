@@ -1,0 +1,29 @@
+This is a placeholder. Create the actual ScriptableObject in Unity Editor:
+
+1. Right-click in Assets/Resources/VehicleStats/
+2. Create > Monaco Motors > Vehicle Stats
+3. Name it "MonacoGLS"
+4. Set the following values:
+
+Monaco GLS - Compact Luxury SUV
+===============================
+Display Name: Monaco GLS
+Class Name: SUV
+Description: A compact luxury crossover combining urban agility with premium comfort. Higher ride height provides commanding road presence.
+
+Performance Stats:
+- Top Speed: 195 km/h
+- Acceleration Time: 6.2 (0-100 feel)
+- Handling: 0.85
+- Drift Factor: 0.35 (stable, not drift-focused)
+- Braking: 1.1 (good brakes)
+
+Physics:
+- Mass: 1850 kg
+- Center of Mass Offset: (0, -0.25, 0.15)
+
+Notes:
+- Higher mass = more momentum, harder to stop
+- Lower handling = wider turns
+- Low drift factor = stable in corners
+- Good for beginners who want stability over speed
