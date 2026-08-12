@@ -1,0 +1,37 @@
+{
+  "car_id": "monaco_gls",
+  "display_name": "Monaco GLS",
+  "class": "SUV",
+  "generation": {
+    "prompt": "a compact luxury SUV car, boxy rectangular shape, modern crossover design, short overhangs, upright stance, large front grille, LED headlights, roof rails, 19-inch alloy wheels, clean surfaces, side view",
+    "negative_prompt": "deformed, low quality, blurry, text, watermark",
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64,
+    "target_faces": 8000
+  },
+  "post_processing": {
+    "decimate_ratio": 0.5,
+    "smooth_iterations": 2,
+    "center_origin": true,
+    "scale_to_meters": 4.5,
+    "rotation_correction": [0, 90, 0]
+  },
+  "unity": {
+    "prefab_path": "Assets/Prefabs/Vehicles/MonacoGLS.prefab",
+    "model_path": "Assets/Models/Vehicles/monaco_gls.fbx",
+    "materials": {
+      "body": "Assets/Materials/Vehicles/MonacoGLS_Body.mat",
+      "glass": "Assets/Materials/Vehicles/Glass.mat",
+      "wheels": "Assets/Materials/Vehicles/Wheels.mat",
+      "interior": "Assets/Materials/Vehicles/Interior.mat"
+    }
+  },
+  "stats": {
+    "top_speed": 195,
+    "acceleration_time": 6.2,
+    "handling": 0.85,
+    "drift_factor": 0.35,
+    "braking": 1.1,
+    "mass": 1850
+  }
+}
