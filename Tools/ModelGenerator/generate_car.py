@@ -2,11 +2,19 @@
 """
 Monaco Motors - Car Model Generator
 Uses Shap-E for text-to-3D generation with post-processing pipeline.
+
+Supported platforms:
+- Windows with NVIDIA GPU (CUDA) - fastest
+- Windows with Intel CPU - uses all cores
+- macOS with Apple Silicon (M1/M2/M3/M4/M5) - CPU mode (MPS lacks float64)
+- macOS with Intel - uses all cores
+- Linux with NVIDIA GPU (CUDA) - fastest
 """
 
 import argparse
 import json
 import os
+import platform
 import sys
 from pathlib import Path
 
@@ -22,10 +30,66 @@ from shap_e.models.download import load_model, load_config
 from shap_e.util.notebooks import decode_latent_mesh
 
 
+def get_system_info() -> dict:
+    """Detect system capabilities for optimal configuration."""
+    info = {
+        "os": platform.system(),
+        "machine": platform.machine(),
+        "processor": platform.processor(),
+        "cuda_available": torch.cuda.is_available(),
+        "mps_available": hasattr(torch.backends, 'mps') and torch.backends.mps.is_available(),
+        "cpu_count": os.cpu_count() or 4,
+    }
+
+    if info["cuda_available"]:
+        info["cuda_device"] = torch.cuda.get_device_name(0)
+        info["cuda_memory"] = torch.cuda.get_device_properties(0).total_memory // (1024**3)
+
+    return info
+
+
+def select_device(requested_device: str = None) -> str:
+    """Select optimal compute device based on system capabilities."""
+    info = get_system_info()
+
+    # User override
+    if requested_device:
+        print(f"Using requested device: {requested_device}")
+        return requested_device
+
+    # CUDA (Windows/Linux with NVIDIA GPU) - best option
+    if info["cuda_available"]:
+        print(f"✓ CUDA available: {info.get('cuda_device', 'Unknown GPU')}")
+        print(f"  GPU Memory: {info.get('cuda_memory', '?')} GB")
+        return "cuda"
+
+    # MPS (Apple Silicon) - Shap-E needs float64 which MPS doesn't support
+    if info["mps_available"]:
+        print(f"Note: Apple Silicon detected ({info['machine']})")
+        print("  MPS available but Shap-E requires float64 (unsupported by MPS)")
+        print(f"  Using CPU with {info['cpu_count']} cores (still fast on Apple Silicon)")
+        return "cpu"
+
+    # CPU fallback
+    print(f"Using CPU with {info['cpu_count']} cores")
+    if info["os"] == "Windows":
+        print("  Tip: Install CUDA toolkit for faster generation with NVIDIA GPU")
+    return "cpu"
+
+
 class CarModelGenerator:
     def __init__(self, device: str = None):
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        print(f"Using device: {self.device}")
+        print("\n" + "="*60)
+        print("Monaco Motors - Car Model Generator")
+        print("="*60)
+
+        self.device = select_device(device)
+
+        # Optimize CPU threading
+        if self.device == "cpu":
+            cpu_count = os.cpu_count() or 4
+            torch.set_num_threads(cpu_count)
+            print(f"  PyTorch threads: {cpu_count}")
 
         print("Loading Shap-E models...")
         self.xm = load_model("transmitter", device=self.device)
@@ -172,12 +236,51 @@ def generate_car_from_spec(spec_path: str, output_dir: str = None):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate 3D car models for Monaco Motors")
+    parser = argparse.ArgumentParser(
+        description="Generate 3D car models for Monaco Motors",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python generate_car.py car_specs/monaco_gls.json           # Auto-detect best device
+  python generate_car.py car_specs/vento_gt.json --device cuda  # Force CUDA
+  python generate_car.py car_specs/strada_500.json --device cpu  # Force CPU
+
+Platform support:
+  - Windows + NVIDIA GPU: Uses CUDA (fastest)
+  - Windows + Intel CPU: Uses all CPU cores
+  - macOS + Apple Silicon: Uses CPU (MPS lacks float64 support)
+  - Linux + NVIDIA GPU: Uses CUDA
+        """
+    )
     parser.add_argument("spec", help="Path to car spec JSON file")
     parser.add_argument("-o", "--output", help="Output directory", default=None)
-    parser.add_argument("--device", help="Device (cuda/cpu)", default=None)
+    parser.add_argument(
+        "--device",
+        help="Compute device: 'cuda' (NVIDIA GPU), 'cpu', or 'auto' (default)",
+        choices=["cuda", "cpu", "auto"],
+        default=None
+    )
+    parser.add_argument(
+        "--info",
+        action="store_true",
+        help="Print system info and exit"
+    )
 
     args = parser.parse_args()
+
+    if args.info:
+        info = get_system_info()
+        print("\nSystem Information:")
+        print(f"  OS: {info['os']}")
+        print(f"  Machine: {info['machine']}")
+        print(f"  Processor: {info['processor']}")
+        print(f"  CPU Cores: {info['cpu_count']}")
+        print(f"  CUDA Available: {info['cuda_available']}")
+        if info['cuda_available']:
+            print(f"    Device: {info.get('cuda_device', 'Unknown')}")
+            print(f"    Memory: {info.get('cuda_memory', '?')} GB")
+        print(f"  MPS Available: {info['mps_available']}")
+        return
 
     if not os.path.exists(args.spec):
         print(f"Error: Spec file not found: {args.spec}")

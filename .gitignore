@@ -61,3 +61,16 @@ Thumbs.db
 
 # Superpowers brainstorming
 .superpowers/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# Model Generator
+Tools/ModelGenerator/venv/
+Tools/ModelGenerator/shap_e_model_cache/
+*.ply
+*.obj.mtl
