@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MonacoMotors.Vehicle
 {
-    [CreateAssetMenu(fileName = "CarDatabase", menuName = "Monaco Motors/Car Database")]
+    [CreateAssetMenu(fileName = "CarDatabase", menuName = "Generic Driving Test Game/Car Database")]
     public class CarDatabase : ScriptableObject
     {
         [SerializeField] private List<CarEntry> cars = new List<CarEntry>();

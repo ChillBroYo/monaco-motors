@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Monaco Motors - Car Model Generator
+Generic Driving Test Game - Car Model Generator
 Uses Shap-E for text-to-3D generation with post-processing pipeline.
 
 Supported platforms:
@@ -80,7 +80,7 @@ def select_device(requested_device: str = None) -> str:
 class CarModelGenerator:
     def __init__(self, device: str = None):
         print("\n" + "="*60)
-        print("Monaco Motors - Car Model Generator")
+        print("Generic Driving Test Game - Car Model Generator")
         print("="*60)
 
         self.device = select_device(device)
@@ -237,7 +237,7 @@ def generate_car_from_spec(spec_path: str, output_dir: str = None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate 3D car models for Monaco Motors",
+        description="Generate 3D car models for Generic Driving Test Game",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

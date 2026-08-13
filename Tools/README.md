@@ -1,4 +1,4 @@
-# Monaco Motors - Tools
+# Generic Driving Test Game - Tools
 
 This directory contains tools for automated asset generation and processing.
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MonacoMotors.Vehicle
 {
-    [CreateAssetMenu(fileName = "NewVehicleStats", menuName = "Monaco Motors/Vehicle Stats")]
+    [CreateAssetMenu(fileName = "NewVehicleStats", menuName = "Generic Driving Test Game/Vehicle Stats")]
     public class VehicleStats : ScriptableObject
     {
         [Header("Performance")]

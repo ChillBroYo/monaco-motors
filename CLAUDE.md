@@ -1,10 +1,10 @@
-# Monaco Motors - Claude Code Instructions
+# Generic Driving Test Game - Claude Code Instructions
 
 This file provides context for Claude Code agents working on this project.
 
 ## Project Overview
 
-Monaco Motors is a **mobile racing game** built with Unity 6. Think Forza Horizon but for mobile — simcade physics, beautiful visuals, career progression.
+Generic Driving Test Game is a **mobile racing game** built with Unity 6. Think Forza Horizon but for mobile — simcade physics, beautiful visuals, career progression.
 
 **Current Phase:** Pre-development (architecture and tooling setup)
 

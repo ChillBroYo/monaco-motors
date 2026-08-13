@@ -1,4 +1,4 @@
-# Monaco Motors
+# Generic Driving Test Game
 
 A high-detail simcade racing game built with Unity 6. Forza-inspired driving experience with AI-generated car models, targeting mobile platforms (iOS/Android) with PC-ready architecture.
 
@@ -29,7 +29,7 @@ This section documents the project for future Claude Code sessions.
 
 ### Quick Context
 
-Monaco Motors is a mobile racing game with Forza Horizon-style simcade physics. The project uses:
+Generic Driving Test Game is a mobile racing game with Forza Horizon-style simcade physics. The project uses:
 - **Vertical slice approach** — Build one complete experience first, then expand
 - **AI model generation** — Cars are generated with Shap-E, not manually modeled
 - **Mobile-first** — iOS/Android primary targets, PC secondary
